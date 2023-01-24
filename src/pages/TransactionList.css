@@ -1,0 +1,29 @@
+#sold-container{
+    padding:12px;
+    border: 1px solid gainsboro;
+    border-bottom-right-radius: 28px;
+    border-bottom-left-radius: 28px;
+}
+.sold-label{
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+}
+.sold-label span{
+    font-weight: 600;
+}
+.text-success{
+    color:var(--ion-color-success)
+}
+.text-primary{
+    color:var(--ion-color-primary)
+}
+#add-btn{
+    position: absolute;
+
+}
+#trans-list{
+    border-top:1px solid gainsboro;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}

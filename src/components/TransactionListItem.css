@@ -1,0 +1,54 @@
+ion-item{
+    --padding-start:0;
+    --inner-padding-end:0
+}
+ion-label{
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+ion-item h2{
+    font-weight:600;
+    margin:0;
+}
+ion-item p{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 95%;
+    white-space: nowrap;
+}
+ion-item .amount{
+    align-items: center;
+    font-weight: 600;
+}
+ion-item ion-note {
+    font-size: 15px;
+    margin-right: 8px;
+    font-weight: normal;
+}
+ion-checkbox{
+    margin-right:14px;
+    background-color:var(--ion-color-success)
+}
+ion-item ion-note.md {
+    margin-right: 14px;
+}
+.withdraw-color{
+    color:var(--ion-color-danger)
+}
+.deposite-color{
+    color:var(--ion-color-success)
+}
+.dot {
+    display: block;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    align-self: start;
+    margin: 16px 10px 16px 16px;
+}
+.dot-unread {
+    background: var(--ion-color-primary);
+}
+  
+  
