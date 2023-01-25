@@ -1,9 +1,3 @@
-#sold-container{
-    padding:12px;
-    border: 1px solid gainsboro;
-    border-bottom-right-radius: 28px;
-    border-bottom-left-radius: 28px;
-}
 .sold-label{
     font-size: 18px;
     display: flex;
@@ -22,8 +16,40 @@
     position: absolute;
 
 }
-#trans-list{
-    border-top:1px solid gainsboro;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+
+.sold-card{
+    margin-top:40px;
+    height: 53px;
+    background-color:#64D8FD;
+    border-radius: 6px;
+    width: 90%;
+    margin:5%;
+}
+.sum{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: justify;
+    color: #000000;
+    position: relative;
+    top:15px;
+    left:8px;
+}
+
+#actual-sum{
+    margin-right:15px;
+    color:#EC1D1D;
+}
+
+p.date{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 12px;
+    text-align: justify;
+    margin-left: 12px;
+    margin-bottom: 0;
 }

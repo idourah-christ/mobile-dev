@@ -2,9 +2,15 @@ import {
     IonLabel, 
     IonItem, 
     IonNote,
-    IonCheckbox
+    IonCheckbox,
+    IonRow,
+    IonCol,
+    IonGrid,
+    IonContent,
+    IonIcon
 } from "@ionic/react";
 
+import { man, trash, pencil, eye, pencilSharp} from 'ionicons/icons';
 import { Transaction, getTransaction } from "../data/transactions";
 import './TransactionListItem.css';
 import { useAppDispatch } from "../redux/hooks";
@@ -26,22 +32,38 @@ const TransactionListItem: React.FC<TransactionListItemProps>=({transaction}) =>
         const transId = event.target.dataset.id;
         dispacth(updateStatus(transId))
     }
+
     return(
-        <IonItem>
-            <div slot="start" className='dot dot-unread'></div>
-            <IonLabel className='ion-text-wrap'>
-                <h2>
-                    {transaction.title}
-                </h2>
-                <h3 className='text-muted'>{transaction.date}</h3>
-                <h3> 
-                    <span className='amount'>
-                        <IonNote className={noteColor(transaction.amount)}>{transaction.amount}</IonNote>
-                    </span>
-                </h3>
-            </IonLabel>
-            <IonCheckbox data-id={transaction.id} checked={transaction.checked} onClick={handleClick} />
-        </IonItem>
+        <div className="list-item-card card border-info" data-toggle="collapse" aria-expanded="false" aria-controls="collapseFooter">
+            <div className='card-body'>
+                <div className='container-fluid'>
+                    <div className='d-flex'>
+                        <div className='col' id='icon-container'>
+                            <IonLabel>
+                                <IonIcon icon={man} className='icons'/>
+                            </IonLabel>
+                        </div>
+                        <div className='col-9'>
+                            <IonLabel className='card-title'>
+                                <p>{ transaction.title}</p>
+                            </IonLabel>
+                           
+                            <small className={'amount '+ noteColor(transaction.amount)} >{transaction.amount}</small>
+                        </div>
+                        <div className='col-1'>
+                            <IonCheckbox className='trans-checkbox' data-id={transaction.id} checked={transaction.checked} onClick={handleClick} />
+                        </div>
+                    </div>
+                </div> 
+                
+            </div>
+            <div className='d-flex justify-content-between card-footer' id="collapseFooter">
+                    <IonIcon id="view" icon={eye}/>
+                    <IonIcon id="edit" icon={pencilSharp}/>
+                    <IonIcon id="delete" icon={trash}/>
+            </div>
+           
+        </div>
     )
 
 }

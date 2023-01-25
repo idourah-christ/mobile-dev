@@ -65,20 +65,20 @@ const TransactionList: React.FC<RootState> = (props) => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-        <div className='alert-info alert mb-4' id='sold-container'>
+        <div className='sold-card'>
           <div className='card-body d-flex justify-content-between'>
             <h2 className='sold-label'>
-                <small className='text-muted'>sold</small>
-                <span className='text-primary'>{totalSum.toFixed(2)}</span>
+                {/* <small className='text-muted'>sold</small> */}
+                <span className='sum' id='current-sum'>{totalSum.toFixed(2)}</span>
               </h2>
             <h2 className='sold-label'>
-                <small className='text-muted'>sold</small>
-                <span className='text-success'>{sumWithChecked.toFixed(2)}</span>
+                {/* <small className='text-muted'>sold</small> */}
+                <span className='sum' id='actual-sum'>{sumWithChecked.toFixed(2)}</span>
               </h2>
           </div>
         </div>
-
-        <IonList className='' id='trans-list'>
+        <p className='date'>aujourd'hui</p>
+        <IonList>
           {transactions.map(t => <TransactionListItem key={t.id} transaction={t} />)}
         </IonList>
         <IonFab horizontal='end'>
