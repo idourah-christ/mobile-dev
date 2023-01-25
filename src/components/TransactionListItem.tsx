@@ -76,12 +76,17 @@ const TransactionListItem: React.FC<TransactionListItemProps>=({transaction}) =>
                 
             </div>
             <div className='d-flex justify-content-between card-footer'>
-                    <IonButton id="open-modal" expand="block">
+                    <IonButton className='card-btn' id="open-modal" expand="block">
                         <IonIcon data-toggle="modal" data-target="#exampleModal" icon={eye}/>
                     </IonButton>
+                    <IonButton className='card-btn' color='success'>
+                        <IonIcon icon={pencilSharp}/>
+                    </IonButton>
                    
-                    <IonIcon id="edit" icon={pencilSharp}/>
-                    <IonIcon id="delete" icon={trash}/>
+                    <IonButton className='card-btn' color='danger'>
+                        <IonIcon icon={trash}/>
+                    </IonButton>
+                   
             </div>
             <IonContent>
             <IonModal ref={modal} trigger="open-modal" onWillDismiss={(ev) => onWillDismiss(ev)}>

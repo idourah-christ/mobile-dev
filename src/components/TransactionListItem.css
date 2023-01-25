@@ -49,3 +49,7 @@ small.date{
 #view{
     color:var(--ion-color-primary)
 }
+.card-btn{
+  margin-top: 0;
+  height: 28px;
+}
