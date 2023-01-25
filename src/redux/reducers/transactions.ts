@@ -43,24 +43,25 @@ export const transactionSlice = createSlice({
     reducers:{
         set:(state) => {
 
-            let trans:Transaction[] = [];
-
-            const readData = async () =>{
-                const contents = await Filesystem.readFile({
-                    path:"data/db.json",
-                    directory:Directory.Data,
-                    encoding:Encoding.UTF8
-                })
-
-                trans = JSON.parse(contents.data)
+            if (Capacitor.isNativePlatform()){
+                const readData = async () =>{
+                    const contents = await Filesystem.readFile({
+                        path:"data/db.json",
+                        directory:Directory.Data,
+                        encoding:Encoding.UTF8
+                    })
+    
+                    state.transactions = JSON.parse(contents.data)
+                }
             }
+            
 
             
             return {
                 ...state,
                 totalSum:totalSum(state.transactions),
                 sumWithChecked:totalSumWithChecked(state.transactions),
-                transactions:trans
+                
             }
         },
         updateStatus:(state, action: PayloadAction<string>) => {

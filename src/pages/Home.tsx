@@ -56,7 +56,7 @@ const Home: React.FC<RootState> = (props) => {
               <Route exact path='/home/categories' component={CategoriesList} />
               <Route exact path="/home/categories/new" component={AddCategory} />
               <Route exact path="/home/categories/:categoryId/transactions" component={ViewCategory}/>
-                           
+              
              
             </IonRouterOutlet>
           <IonTabBar slot='bottom'>
