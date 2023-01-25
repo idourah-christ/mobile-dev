@@ -42,10 +42,25 @@ export const transactionSlice = createSlice({
     initialState,
     reducers:{
         set:(state) => {
+
+            let trans:Transaction[] = [];
+
+            const readData = async () =>{
+                const contents = await Filesystem.readFile({
+                    path:"data/db.json",
+                    directory:Directory.Data,
+                    encoding:Encoding.UTF8
+                })
+
+                trans = JSON.parse(contents.data)
+            }
+
+            
             return {
                 ...state,
                 totalSum:totalSum(state.transactions),
-                sumWithChecked:totalSumWithChecked(state.transactions)
+                sumWithChecked:totalSumWithChecked(state.transactions),
+                transactions:trans
             }
         },
         updateStatus:(state, action: PayloadAction<string>) => {
@@ -61,12 +76,12 @@ export const transactionSlice = createSlice({
         },
         append:(state, action: PayloadAction<Transaction>) => {
 
-            const transactionData = [...state.transactions, action.payload];
+            const data = [...state.transactions, action.payload];
 
-            const writeSecretFile = async () => {
+            const writeData = async () => {
                 await Filesystem.writeFile({
                   path: 'data/db.json',
-                  data: JSON.stringify(transactionData),
+                  data: JSON.stringify(data),
                   directory: Directory.Data,
                   encoding: Encoding.UTF8,
                 });
