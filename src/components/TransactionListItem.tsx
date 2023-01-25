@@ -6,16 +6,24 @@ import {
     IonRow,
     IonCol,
     IonGrid,
+    IonInput,
     IonContent,
-    IonIcon
+    IonIcon,
+    IonModal,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonTitle,
+    IonHeader
 } from "@ionic/react";
 
-import { man, trash, pencil, eye, pencilSharp} from 'ionicons/icons';
+import { useRef, useState } from "react";
+import { man, trash,eye, pencilSharp} from 'ionicons/icons';
 import { Transaction, getTransaction } from "../data/transactions";
 import './TransactionListItem.css';
 import { useAppDispatch } from "../redux/hooks";
 import { updateStatus } from "../redux/reducers/transactions";
-
+import { OverlayEventDetail } from '@ionic/core/components';
 interface TransactionListItemProps{
     transaction:Transaction;
 }
@@ -28,11 +36,21 @@ const noteColor = (type:number) => {
 const TransactionListItem: React.FC<TransactionListItemProps>=({transaction}) => {
     const dispacth = useAppDispatch();
 
+    const [message, setMessage] = useState(
+        'This modal example uses triggers to automatically open a modal when the button is clicked.'
+      );
+
     const handleClick = (event:any) => {
         const transId = event.target.dataset.id;
         dispacth(updateStatus(transId))
     }
-
+    function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
+        if (ev.detail.role === 'confirm') {
+          setMessage(`Hello, ${ev.detail.data}!`);
+        }
+      }
+    const modal = useRef<HTMLIonModalElement>(null);
+    const input = useRef<HTMLIonInputElement>(null);
     return(
         <div className="list-item-card card border-info" data-toggle="collapse" aria-expanded="false" aria-controls="collapseFooter">
             <div className='card-body'>
@@ -57,11 +75,29 @@ const TransactionListItem: React.FC<TransactionListItemProps>=({transaction}) =>
                 </div> 
                 
             </div>
-            <div className='d-flex justify-content-between card-footer' id="collapseFooter">
-                    <IonIcon id="view" icon={eye}/>
+            <div className='d-flex justify-content-between card-footer'>
+                    <IonButton id="open-modal" expand="block">
+                        <IonIcon data-toggle="modal" data-target="#exampleModal" icon={eye}/>
+                    </IonButton>
+                   
                     <IonIcon id="edit" icon={pencilSharp}/>
                     <IonIcon id="delete" icon={trash}/>
             </div>
+            <IonContent>
+            <IonModal ref={modal} trigger="open-modal" onWillDismiss={(ev) => onWillDismiss(ev)}>
+                <IonHeader>
+                    <IonToolbar>
+                    <IonButtons slot="start">
+                        <IonButton  onClick={() => modal.current?.dismiss()}>Cancel</IonButton>  
+                    </IonButtons>
+                </IonToolbar>
+                </IonHeader>
+                <IonContent className="ion-padding">
+                    <img src={transaction.image}/>
+                </IonContent>
+            </IonModal>
+            </IonContent>
+            
            
         </div>
     )

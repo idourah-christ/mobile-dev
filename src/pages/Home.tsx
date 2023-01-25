@@ -75,7 +75,6 @@ const Home: React.FC<RootState> = (props) => {
   );
 };
 
-
 const mapState = (state:RootState) => {
   return {
     transactions:state.transactions,

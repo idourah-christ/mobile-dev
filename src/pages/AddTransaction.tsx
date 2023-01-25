@@ -12,8 +12,10 @@ import {
     IonButton,
     IonSelect,
     IonSelectOption,
-    useIonViewWillEnter
+    useIonViewWillEnter,
+    IonIcon
  } from "@ionic/react";
+ import {image} from 'ionicons/icons'
  import './AddTransactions.css';
  import { useEffect, useState } from "react";
  import { types } from "../data/transactions";
@@ -24,11 +26,15 @@ import { useHistory } from "react-router";
 import { RooState } from "../redux/store";
 import { set } from "../redux/reducers/categories";
 import { connect } from "react-redux";
+
+import { Camera, CameraResultType} from '@capacitor/camera';
  
 
 const AddTransaction: React.FC<RooState> = (props) => {
     const dispatch = useAppDispatch();
     const history = useHistory()
+
+    let imagePath = '';
 
     useEffect(() => {
         dispatch(set())
@@ -39,9 +45,27 @@ const AddTransaction: React.FC<RooState> = (props) => {
         amount:'',
         type:'',
         date:'',
-        categoryId:''
+        categoryId:'',
+        imgPath:'',
     })
 
+    const takePicture = async (event:any) => {
+
+        const image = await Camera.getPhoto({
+            quality:90,
+            allowEditing:false,
+            resultType:CameraResultType.Uri
+        }).then(response => {
+            if(response.webPath){
+                setState({
+                    ...state,
+                    imgPath:response.webPath
+                    
+                })
+            }
+        });
+
+    }
     const handleChange = (event:any) => {
         setState({
             ...state,
@@ -64,7 +88,8 @@ const AddTransaction: React.FC<RooState> = (props) => {
             date:state.date,
             type:state.type,
             checked:false,
-            categoryId:state.categoryId
+            categoryId:state.categoryId,
+            image:state.imgPath
         }
         dispatch(append(trans));
         history.push('/home/transactions')
@@ -116,8 +141,15 @@ const AddTransaction: React.FC<RooState> = (props) => {
                             <IonItem className='group-form mt-2'>
                                 <IonInput type='date' onIonChange={handleChange} name="date" value={state.date}></IonInput>
                             </IonItem>
+
+                            <div className='group-form mt-2'>
+                                <IonButton onClick={takePicture} color='success'>
+                                    <IonIcon className='text-dark mr-1' icon={image}/>
+                                    facture
+                                </IonButton>
+                            </div>
                             <div className='mt-2'>
-                                <IonButton type='submit'>
+                                <IonButton type='submit' className='col-12'>
                                     <IonLabel>Ajouter</IonLabel>
                                 </IonButton>
                             </div>

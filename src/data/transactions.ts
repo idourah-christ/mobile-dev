@@ -5,7 +5,8 @@ export interface Transaction{
     amount:number,
     checked:boolean,
     type:string,
-    categoryId:string
+    categoryId:string,
+    image:string
 }
 export interface Category{
     id:string,
@@ -49,7 +50,8 @@ export const transactions: Transaction[] =[
         checked:true,
         type:"1",
         date:"17/01/2023",
-        categoryId:"2"
+        categoryId:"2",
+        image:''
     }
     // {
     //     id:"2",
