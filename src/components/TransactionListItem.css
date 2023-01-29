@@ -25,10 +25,14 @@ small.date{
 }
 
 .icons{
-    height:32px;
-    width:32px;
-    position: absolute;
-    left:8px;
+    height:24px;
+    width:24px;
+}
+#icon-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    color:gainsboro;
 }
 .trans-checkbox{
    float: right;
@@ -49,7 +53,7 @@ small.date{
 #view{
     color:var(--ion-color-primary)
 }
-.card-btn{
+ion-button.card-btn{
   margin-top: 0;
   height: 28px;
 }

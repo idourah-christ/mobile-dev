@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import { add, ellipsisVerticalOutline } from 'ionicons/icons';
 import { useAppDispatch } from '../../redux/hooks';
-import { set } from '../../redux/reducers/transactions';
+import { fetchTransactions } from '../../redux/reducers/transactions';
 import { useEffect} from 'react';
 import { categories } from '../../data/transactions';
 import CategoryListItem from '../../components/CategoryListItem';
@@ -23,8 +23,8 @@ const CategoriesList: React.FC<RootState> = (props) => {
 
 
   useEffect(() => {
-    dispacth(set())
-  }, [dispacth])
+    dispacth(fetchTransactions)
+  }, [])
 
   
   const refresh = (e: CustomEvent) => {

@@ -1,7 +1,7 @@
 import TransactionListItem from '../components/TransactionListItem';
 import { connect} from 'react-redux';
 import { RootState } from '../redux/reducers/root';
-import { Route } from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 import {
   IonContent,
   IonHeader,
@@ -12,29 +12,34 @@ import {
   IonTitle,
   IonToolbar,
   IonFab,IonFabButton,IonIcon,
-  IonTab,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonLabel,
-  IonRouterOutlet
+  IonAccordionGroup,
+  useIonAlert,
+  IonInput,
+  IonButton
 } from '@ionic/react';
-import { add } from 'ionicons/icons';
+import { add, search, ellipsisVertical} from 'ionicons/icons';
 import './Home.css';
 import { useAppDispatch } from '../redux/hooks';
-import { set } from '../redux/reducers/transactions';
-import { useEffect} from 'react';
+import { fetchTransactions, total } from '../redux/reducers/transactions';
+import { useEffect, useState} from 'react';
 import './TransactionList.css';
 
-const TransactionList: React.FC<RootState> = (props) => {
-  const dispacth = useAppDispatch()
 
-  // useIonViewWillEnter(() => {
-   
-  // });
+
+const TransactionList: React.FC<RootState> = (props) => {
+  const dispacth = useAppDispatch();
+
+
+  const [presentAlert] = useIonAlert();
+
+  const [handleMessage, setHandlerMessage] = useState('');
+
+  const [roleMessage, setRoleMessage] = useState('');
+
+
   useEffect(() => {
-    dispacth(set())
-  }, [props.transactions.transactions])
+    dispacth(fetchTransactions())
+  }, [])
 
   
   const refresh = (e: CustomEvent) => {
@@ -43,15 +48,22 @@ const TransactionList: React.FC<RootState> = (props) => {
     }, 3000);
   };
   
-  const { transactions, totalSum, sumWithChecked} = props.transactions;
-
- 
+  const { transactions} = props.transactions;
+  
+  
+  
+  const totalWithChecked = () =>{
+    const transList = transactions.filter(trans => trans.checked)
+    return total(transList);
+  }
   return (
     <IonPage id="home-page">
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Transactions</IonTitle>
-        </IonToolbar>
+       <div className='col-1'>
+          <IonIcon icon={search} className='search-icon'/>
+        </div>
+       <div className='col-10 d-flex text-center'><IonInput placeholder='Chercher une transaction...'/></div>
+       <div className='col-1'><IonIcon className='ellipse-icon' icon={ellipsisVertical} /></div>
       </IonHeader>
       <IonContent fullscreen>
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
@@ -68,18 +80,18 @@ const TransactionList: React.FC<RootState> = (props) => {
         <div className='sold-card'>
           <div className='card-body d-flex justify-content-between'>
             <h2 className='sold-label'>
-                {/* <small className='text-muted'>sold</small> */}
-                <span className='sum' id='current-sum'>{totalSum.toFixed(2)}</span>
+                <span className='sum' id='current-sum'>{total(transactions).toFixed(2)}</span>
               </h2>
             <h2 className='sold-label'>
-                {/* <small className='text-muted'>sold</small> */}
-                <span className='sum' id='actual-sum'>{sumWithChecked.toFixed(2)}</span>
+                <span className='sum' id='actual-sum'>{totalWithChecked().toFixed(2)}</span>
               </h2>
           </div>
         </div>
         <p className='date'>aujourd'hui</p>
         <IonList>
-          {transactions.map(t => <TransactionListItem key={t.id} transaction={t} />)}
+           <IonAccordionGroup>
+           {transactions && transactions.map(t => <TransactionListItem key={t.id} transaction={t} />)}
+           </IonAccordionGroup>
         </IonList>
         <IonFab horizontal='end'>
           <IonFabButton size='small' routerLink='/home/transactions/new'>

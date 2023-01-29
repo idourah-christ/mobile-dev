@@ -1,5 +1,5 @@
-import { Transaction, transactions} from "../../data/transactions";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Transaction} from "../../data/transactions";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./root";
 import {Filesystem, Directory, Encoding} from '@capacitor/filesystem';
 import {Capacitor} from '@capacitor/core';
@@ -11,82 +11,105 @@ export interface ActionType{
 
 interface transactionState{
     transactions:Transaction[],
-    totalSum:number,
-    sumWithChecked:number
 }
 
-const totalSum = (transactions:Transaction[]) => {
-    let sum:number = 0;
-    transactions.forEach(trans => {
-        sum += trans.amount
+export const fetchTransactions = createAsyncThunk("transactions/fetchTransactions", async() => {
+    return await Filesystem.readFile({
+        path:'data/db.json',
+        directory:Directory.Documents
+    }).then(response => response.data)
+})
+
+export const saveTransactions = createAsyncThunk("transactions/post",async(transactions:Transaction) =>{
+
+    return await Filesystem.writeFile({
+        path:'data/db.json',
+        data:JSON.stringify(transactions),
+        directory:Directory.Documents,
+        encoding:Encoding.UTF8
     })
-    return sum;
-}
-const totalSumWithChecked = (transactions:Transaction[]) =>{
-    let sum:number = 0;
+})
+
+export const total = (transactions:Transaction[]) => {
+    let sum = 0.0;
+    if(!transactions.length){
+      return sum;
+    }
     transactions.forEach(trans => {
-        if(trans.checked){
-            sum += trans.amount;
-        }
+      sum += trans.amount;
     })
     return sum;
 }
 const initialState: transactionState = {
     transactions:[],
-    totalSum:0,
-    sumWithChecked:0
 }
 
 export const transactionSlice = createSlice({
     name:"transactions",
     initialState,
+    extraReducers:(builder) =>{
+        builder.addCase(fetchTransactions.fulfilled, (state, action) =>{
+     
+        return{
+            ...state,
+            transactions:JSON.parse(action.payload),
+           } 
+        })
+    },
     reducers:{
-        set:(state) => {
-
-            if (Capacitor.isNativePlatform()){
-                const readData = async () =>{
-                    const contents = await Filesystem.readFile({
-                        path:"data/db.json",
-                        directory:Directory.Data,
-                        encoding:Encoding.UTF8
-                    })
-    
-                    state.transactions = JSON.parse(contents.data)
-                }
-            }
-            
-
-            
-            return {
-                ...state,
-                totalSum:totalSum(state.transactions),
-                sumWithChecked:totalSumWithChecked(state.transactions),
-                
-            }
-        },
         updateStatus:(state, action: PayloadAction<string>) => {
-          
             state.transactions.forEach(t => {
                 if(t.id === action.payload){
                     t.checked = !t.checked
                     return;
                 }
             })
-        
+            const save = async() =>{
+                await Filesystem.writeFile({
+                    path:'data/db.json',
+                    data:JSON.stringify(state.transactions),
+                    directory:Directory.Documents,
+                    encoding:Encoding.UTF8
+                })
+            }
+            save();
             return state;        
+        },
+        deleteTransaction:(state, action:PayloadAction<string>) => {
+
+            const transactionsList = state.transactions.filter(t => t.id !== action.payload);
+
+            const save = async () => {
+                await Filesystem.writeFile({
+                    path:'data/db.json',
+                    data:JSON.stringify(transactionsList),
+                    directory:Directory.Documents,
+                    encoding:Encoding.UTF8
+                })
+            }
+
+            save()
+            return {
+                ...state,
+                transactions:transactionsList
+            }
         },
         append:(state, action: PayloadAction<Transaction>) => {
 
             const data = [...state.transactions, action.payload];
 
-            const writeData = async () => {
+            const save = async () => {
                 await Filesystem.writeFile({
                   path: 'data/db.json',
                   data: JSON.stringify(data),
-                  directory: Directory.Data,
+                  directory: Directory.Documents,
                   encoding: Encoding.UTF8,
                 });
               };
+            
+            save().then(response => {
+                console.log(response)
+            });
 
             return {
                 ...state,
@@ -94,9 +117,8 @@ export const transactionSlice = createSlice({
             }
         },
         filter:(state, action:PayloadAction<string>) =>{
-            set();
+        
             const categoryId = action.payload;
-            console.log(state.transactions)
             const trans = state.transactions.filter(trans => trans.categoryId == categoryId) 
             console.log(trans);
             return{
@@ -110,7 +132,7 @@ export const transactionSlice = createSlice({
     }
 })
 
-export const { set, updateStatus, append, filter } = transactionSlice.actions;
+export const { updateStatus, append, filter, deleteTransaction } = transactionSlice.actions;
 
 export const selectTransactions= (state:RootState) => state.transactions.transactions
 

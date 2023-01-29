@@ -34,8 +34,6 @@ const AddTransaction: React.FC<RooState> = (props) => {
     const dispatch = useAppDispatch();
     const history = useHistory()
 
-    let imagePath = '';
-
     useEffect(() => {
         dispatch(set())
     }, [dispatch, props.categories])
@@ -55,6 +53,7 @@ const AddTransaction: React.FC<RooState> = (props) => {
             quality:90,
             allowEditing:false,
             resultType:CameraResultType.Uri
+        
         }).then(response => {
             if(response.webPath){
                 setState({
@@ -92,7 +91,7 @@ const AddTransaction: React.FC<RooState> = (props) => {
             image:state.imgPath
         }
         dispatch(append(trans));
-        history.push('/home/transactions')
+        history.push('/home')
     }
 
     const {categories} = props.categories;

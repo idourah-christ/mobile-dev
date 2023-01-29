@@ -16,14 +16,29 @@
     position: absolute;
 
 }
+ion-header{
+    position: absolute;
+    top:8px;
+    width: 95%;
+    margin-left:2.5%;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border:1px solid #e5e5e5;
+    box-shadow: 0px 4px 4px rgba(0, 0,0, 0.25);
+    border-radius: 6px;
+
+    display: flex;
+
+}
 
 .sold-card{
-    margin-top:40px;
+    
+    margin-top:73px;
     height: 53px;
     background-color:#64D8FD;
-    border-radius: 6px;
     width: 90%;
-    margin:5%;
+    margin-left:5%;
+    border-radius: 6px;
 }
 .sum{
     font-family: 'Inter';
@@ -38,6 +53,25 @@
     left:8px;
 }
 
+.search-icon{
+ position: absolute;
+ left:auto;
+ right:90.23%;
+ top:auto;
+ bottom: 23.88%;   
+ width: 24px;
+ height: 24px;
+}
+
+.ellipse-icon{
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 90.15%;
+    right: 0%;
+    bottom: 23.88%;
+}
+
 #actual-sum{
     margin-right:15px;
     color:#EC1D1D;
@@ -48,8 +82,9 @@ p.date{
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
-    line-height: 12px;
+    line-height: 16px;
     text-align: justify;
     margin-left: 12px;
     margin-bottom: 0;
+    margin-top:20px;
 }
